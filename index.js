@@ -3,6 +3,7 @@ const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const {users, JWT_SECRET, PORT, API_KEY} = require('./utils/data')
 const cors = require('cors')
+const moment = require('moment')
 
 const app = express();
 app.use(cors());
@@ -68,13 +69,14 @@ app.get('/weather', auth, async(req, res) => {
 
     try{
     //https://openweathermap.org/current
-    const curWeather = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`);
+    const curWeather = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`);
     // console.log("curWeather- ", curWeather.data);
 
     //https://openweathermap.org/forecast16
-    const weatherForecast = await axios.get(`https://api.openweathermap.org/data/2.5/forecast/?lat=${latitude}&cnt=5&appid=${API_KEY}&lon=${longitude}`)
+    const weatherForecast = await axios.get(`https://api.openweathermap.org/data/2.5/forecast/?units=metric&lat=${latitude}&appid=${API_KEY}&lon=${longitude}`)
     console.log("weatherForecast- ",weatherForecast.data)
 
+    
     return res.status(200).json({
         currentWeather: curWeather.data,
         weatherForecast: weatherForecast.data
